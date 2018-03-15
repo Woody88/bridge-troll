@@ -4,10 +4,12 @@ const geo = require('./geo');
 const map = require('./map');
 const log = require('./log');
 const svgMarker = require('./svg-marker');
+var SunCalc = require('suncalc');
 
 const Bridge = require('./bridge');
 const bridges = {};
 
+var sunTimes = SunCalc.getTimes(new Date(), 51.5, -0.1);
 // Listen for updates to the map's bounding box (viewable area)
 // and check for bridges within it that need to be shown.
 map.on('update', bounds => {
@@ -101,6 +103,11 @@ const onReady = () => {
 
   log.info('Waiting for initial position to show map...');
   geo.watchPosition();
+
+  if (sunTimes.sunrise < new Date() && sunTimes.sunset > new Date())
+    document.getElementById("map").style.filter = "brightness(100%)";
+  else
+    document.getElementById("map").style.filter = "brightness(50%)";
 };
 
 // Wait for the DOM to be loaded before we start anything with the map UI
