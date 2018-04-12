@@ -12,7 +12,7 @@ before_install:
 
 before_deploy: 
   - npm run build
-  - sed /dist/d .gitignore
+  - sed -i '/dist/d' .gitignore 
 
 deploy:
   provider: pages
